@@ -1,0 +1,26 @@
+#container {
+	padding: 20px 50px 25px 75px;
+}
+#header {
+	padding-bottom: 25px;
+	padding-left: 20px;
+}
+
+#header .logo {
+	height: 75px;
+	vertical-align: middle;
+}
+#header .menu-superior {
+	padding-top: 20px;
+}
+
+#content {
+	background-color: #ee4565;
+	padding: 10px;
+}
+
+#footer {
+	padding: 25px;
+	text-align: center;
+	font-style: italic;
+}

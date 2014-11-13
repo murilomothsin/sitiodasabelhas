@@ -15,6 +15,7 @@ $cakeVersion = __d('cake_dev', 'Sítio das abelhas - 2014')
 		echo $this->Html->meta('icon');
 
 		echo $this->Html->css('bootstrap');
+		echo $this->Html->css('default');
 
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
@@ -25,16 +26,17 @@ $cakeVersion = __d('cake_dev', 'Sítio das abelhas - 2014')
 	<div id="container" class="container-fluid">
 
 		<div id="header" class="row">
-			<div class="col-md-4">
-				<h1><?php echo $this->Html->link($cakeDescription, 'http://cakephp.org'); ?></h1>
+			<div class="col-md-4 logo">
+				<center><?php echo $this->Html->link($this->Html->image('logo.jpg', array('alt' => 'Sitio das abelhas', 'height' => '75')), '/', array('escape' => false)); ?></center>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-6 menu-superior">
 				<ul class="nav nav-pills nav-justified" role="tablist">
 				  <li role="presentation" class="active"><a href="#">Home</a></li>
-				  <li role="presentation"><a href="#">Profile</a></li>
-				  <li role="presentation"><a href="#">Messages</a></li>
-				  <li role="presentation"><a href="#">Messages</a></li>
-				  <li role="presentation"><a href="#">Messages</a></li>
+				  <li role="presentation"><a href="#">Pousada</a></li>
+				  <li role="presentation"><a href="#">Eventos</a></li>
+				  <li role="presentation"><a href="#">Reservas</a></li>
+				  <li role="presentation"><a href="#">Lazer</a></li>
+				  <li role="presentation"><a href="#">Contato</a></li>
 				</ul>
 			</div>
 		</div>
