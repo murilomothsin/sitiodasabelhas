@@ -1,26 +1,70 @@
+body {
+  background-image: url("../img/background.png");
+}
 #container {
-	padding: 20px 50px 25px 75px;
+  padding: 20px 50px 25px 75px;
 }
 #header {
-	padding-bottom: 25px;
-	padding-left: 20px;
+  padding-bottom: 25px;
+  padding-left: 20px;
 }
 
 #header .logo {
-	height: 75px;
-	vertical-align: middle;
+  height: 75px;
+  vertical-align: middle;
 }
 #header .menu-superior {
-	padding-top: 20px;
+  padding-top: 20px;
 }
 
 #content {
-	background-color: #ee4565;
-	padding: 10px;
+  padding: 10px;
 }
 
 #footer {
-	padding: 25px;
-	text-align: center;
-	font-style: italic;
+  padding: 25px;
+  text-align: center;
+  font-style: italic;
+}
+
+.img_hex_superior {
+  width: 23%;
+  height: auto;
+  margin-left: 1%;
+  margin-right: 1%;
+}
+.img_hex_superior:first-child {
+  margin-left: 0px;
+}
+
+#hexagono {
+  width: 100px;
+  height: 55px;
+  background: #ffffff url("../img/SAM_8513.jpg") no-repeat right top;
+  /* background: black; */
+  position: relative;
+}
+
+#hexagono:before {
+  content: "";
+  position: absolute;
+  top: -25px;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  border-bottom: 25px solid black;
+}
+
+#hexagono:after {
+  content: "";
+  position: absolute;
+  bottom: -25px;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  border-top: 25px solid black;
 }

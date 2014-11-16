@@ -40,4 +40,12 @@ class PagesController extends AppController {
 	public function home() {
 		$this->set("title_for_layout","Home");
 	}
+
+	public function lodging() {
+		$this->set("title_for_layout","Pousada");
+	}
+
+	public function event() {
+		$this->set("title_for_layout","Eventos");
+	}
 }

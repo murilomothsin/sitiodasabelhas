@@ -31,12 +31,12 @@ $cakeVersion = __d('cake_dev', 'Sítio das abelhas - 2014')
 			</div>
 			<div class="col-md-6 menu-superior">
 				<ul class="nav nav-pills nav-justified" role="tablist">
-				  <li role="presentation" class="active"><a href="#">Home</a></li>
-				  <li role="presentation"><a href="#">Pousada</a></li>
-				  <li role="presentation"><a href="#">Eventos</a></li>
-				  <li role="presentation"><a href="#">Reservas</a></li>
-				  <li role="presentation"><a href="#">Lazer</a></li>
-				  <li role="presentation"><a href="#">Contato</a></li>
+				  <li role="presentation" class="active"><?php echo $this->Html->link('Home', '/'); ?></li>
+				  <li role="presentation"><?php echo $this->Html->link('Pousada', '/pousada'); ?></li>
+				  <li role="presentation"><?php echo $this->Html->link('Eventos', '/eventos'); ?></li>
+				  <li role="presentation"><?php echo $this->Html->link('Reservas', '/reservas'); ?></li>
+				  <li role="presentation"><?php echo $this->Html->link('Lazer', '/lazer'); ?></li>
+				  <li role="presentation"><?php echo $this->Html->link('Contato', '/contato'); ?></li>
 				</ul>
 			</div>
 		</div>
