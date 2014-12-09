@@ -6,6 +6,8 @@
  * application development by writing fully functional skeleton controllers,
  * models, and views. Going further, Bake can also write Unit Tests for you.
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -64,9 +66,6 @@ class BakeShell extends AppShell {
 				$this->{$task}->connection = $this->params['connection'];
 			}
 		}
-		if (isset($this->params['connection'])) {
-			$this->connection = $this->params['connection'];
-		}
 	}
 
 /**
@@ -124,7 +123,8 @@ class BakeShell extends AppShell {
 				$this->Test->execute();
 				break;
 			case 'Q':
-				return $this->_stop();
+				exit(0);
+				break;
 			default:
 				$this->out(__d('cake_console', 'You have made an invalid selection. Please choose a type of class to Bake by entering D, M, V, F, T, or C.'));
 		}
@@ -203,19 +203,18 @@ class BakeShell extends AppShell {
 	}
 
 /**
- * Gets the option parser instance and configures it.
+ * get the option parser.
  *
- * @return ConsoleOptionParser
+ * @return void
  */
 	public function getOptionParser() {
 		$parser = parent::getOptionParser();
-
-		$parser->description(
-			__d('cake_console',	'The Bake script generates controllers, views and models for your application.' .
+		return $parser->description(__d('cake_console',
+			'The Bake script generates controllers, views and models for your application.' .
 			' If run with no command line arguments, Bake guides the user through the class creation process.' .
-			' You can customize the generation process by telling Bake where different parts of your application are using command line arguments.')
-		)->addSubcommand('all', array(
-			'help' => __d('cake_console', 'Bake a complete MVC. optional <name> of a Model')
+			' You can customize the generation process by telling Bake where different parts of your application are using command line arguments.'
+		))->addSubcommand('all', array(
+			'help' => __d('cake_console', 'Bake a complete MVC. optional <name> of a Model'),
 		))->addSubcommand('project', array(
 			'help' => __d('cake_console', 'Bake a new app folder in the path supplied or in current directory if no path is specified'),
 			'parser' => $this->Project->getOptionParser()
@@ -244,12 +243,7 @@ class BakeShell extends AppShell {
 			'help' => __d('cake_console', 'Database connection to use in conjunction with `bake all`.'),
 			'short' => 'c',
 			'default' => 'default'
-		))->addOption('theme', array(
-			'short' => 't',
-			'help' => __d('cake_console', 'Theme to use when baking code.')
 		));
-
-		return $parser;
 	}
 
 }

@@ -2,6 +2,8 @@
 /**
  * HttpSocketTest file
  *
+ * PHP 5
+ *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -93,7 +95,7 @@ class TestHttpSocket extends HttpSocket {
  * Convenience method for testing protected method
  *
  * @param string|array $uri URI to parse
- * @param bool|array $base If true use default URI config, otherwise indexed array to set 'scheme', 'host', 'port', etc.
+ * @param boolean|array $base If true use default URI config, otherwise indexed array to set 'scheme', 'host', 'port', etc.
  * @return array Parsed URI
  */
 	public function parseUri($uri = null, $base = array()) {
@@ -145,7 +147,7 @@ class TestHttpSocket extends HttpSocket {
 /**
  * Convenience method for testing protected method
  *
- * @param bool $hex true to get them as HEX values, false otherwise
+ * @param boolean $hex true to get them as HEX values, false otherwise
  * @return array Escape chars
  */
 	public function tokenEscapeChars($hex = true, $chars = null) {
@@ -174,14 +176,14 @@ class HttpSocketTest extends CakeTestCase {
 /**
  * Socket property
  *
- * @var mixed
+ * @var mixed null
  */
 	public $Socket = null;
 
 /**
  * RequestSocket property
  *
- * @var mixed
+ * @var mixed null
  */
 	public $RequestSocket = null;
 
@@ -191,9 +193,13 @@ class HttpSocketTest extends CakeTestCase {
  * @return void
  */
 	public function setUp() {
-		parent::setUp();
-		$this->Socket = $this->getMock('TestHttpSocket', array('read', 'write', 'connect'));
-		$this->RequestSocket = $this->getMock('TestHttpSocket', array('read', 'write', 'connect', 'request'));
+		if (!class_exists('MockHttpSocket')) {
+			$this->getMock('TestHttpSocket', array('read', 'write', 'connect'), array(), 'MockHttpSocket');
+			$this->getMock('TestHttpSocket', array('read', 'write', 'connect', 'request'), array(), 'MockHttpSocketRequests');
+		}
+
+		$this->Socket = new MockHttpSocket();
+		$this->RequestSocket = new MockHttpSocketRequests();
 	}
 
 /**
@@ -202,7 +208,6 @@ class HttpSocketTest extends CakeTestCase {
  * @return void
  */
 	public function tearDown() {
-		parent::tearDown();
 		unset($this->Socket, $this->RequestSocket);
 	}
 
@@ -249,7 +254,6 @@ class HttpSocketTest extends CakeTestCase {
 			'port' => 23,
 			'timeout' => 30,
 			'ssl_verify_peer' => true,
-			'ssl_allow_self_signed' => false,
 			'ssl_verify_depth' => 5,
 			'ssl_verify_host' => true,
 			'request' => array(
@@ -278,7 +282,6 @@ class HttpSocketTest extends CakeTestCase {
 			'port' => 80,
 			'timeout' => 30,
 			'ssl_verify_peer' => true,
-			'ssl_allow_self_signed' => false,
 			'ssl_verify_depth' => 5,
 			'ssl_verify_host' => true,
 			'request' => array(
@@ -317,7 +320,6 @@ class HttpSocketTest extends CakeTestCase {
 		$context = array(
 			'ssl' => array(
 				'verify_peer' => true,
-				'allow_self_signed' => false,
 				'verify_depth' => 5,
 				'CN_match' => 'www.cakephp.org',
 				'cafile' => CAKE . 'Config' . DS . 'cacert.pem'
@@ -630,12 +632,12 @@ class HttpSocketTest extends CakeTestCase {
 		$this->Socket->reset();
 		$request = array('uri' => 'htpp://www.cakephp.org/');
 		$number = mt_rand(0, 9999999);
-		$this->Socket->expects($this->any())->method('connect')->will($this->returnValue(true));
+		$this->Socket->expects($this->once())->method('connect')->will($this->returnValue(true));
 		$serverResponse = "HTTP/1.x 200 OK\r\nDate: Mon, 16 Apr 2007 04:14:16 GMT\r\nServer: CakeHttp Server\r\nContent-Type: text/html\r\n\r\n<h1>Hello, your lucky number is " . $number . "</h1>";
-		$this->Socket->expects($this->at(0))->method('write')
-			->with("GET / HTTP/1.1\r\nHost: www.cakephp.org\r\nConnection: close\r\nUser-Agent: CakePHP\r\n\r\n");
 		$this->Socket->expects($this->at(0))->method('read')->will($this->returnValue(false));
 		$this->Socket->expects($this->at(1))->method('read')->will($this->returnValue($serverResponse));
+		$this->Socket->expects($this->once())->method('write')
+			->with("GET / HTTP/1.1\r\nHost: www.cakephp.org\r\nConnection: close\r\nUser-Agent: CakePHP\r\n\r\n");
 		$response = (string)$this->Socket->request($request);
 		$this->assertEquals($response, "<h1>Hello, your lucky number is " . $number . "</h1>");
 	}
@@ -652,13 +654,13 @@ class HttpSocketTest extends CakeTestCase {
 		$this->Socket->connected = true;
 		$this->Socket->request($request);
 		$result = $this->Socket->response['cookies'];
-		$expected = array(
+		$expect = array(
 			'foo' => array(
 				'value' => 'bar'
 			)
 		);
-		$this->assertEquals($expected, $result);
-		$this->assertEquals($expected, $this->Socket->config['request']['cookies']['www.cakephp.org']);
+		$this->assertEquals($expect, $result);
+		$this->assertEquals($this->Socket->config['request']['cookies']['www.cakephp.org'], $expect);
 		$this->assertFalse($this->Socket->connected);
 	}
 
@@ -679,7 +681,7 @@ class HttpSocketTest extends CakeTestCase {
 				)
 			)
 		);
-		$http = $this->getMock('TestHttpSocket', array('read', 'write', 'connect', 'request'), array($request));
+		$http = new MockHttpSocketRequests($request);
 
 		$expected = array('method' => 'GET', 'uri' => '/_test');
 		$http->expects($this->at(0))->method('request')->with($expected);
@@ -1051,19 +1053,20 @@ class HttpSocketTest extends CakeTestCase {
  * @return void
  */
 	public function testAuth() {
-		$this->Socket->get('http://mark:secret@example.com/test');
-		$this->assertTrue(strpos($this->Socket->request['header'], 'Authorization: Basic bWFyazpzZWNyZXQ=') !== false);
+		$socket = new MockHttpSocket();
+		$socket->get('http://mark:secret@example.com/test');
+		$this->assertTrue(strpos($socket->request['header'], 'Authorization: Basic bWFyazpzZWNyZXQ=') !== false);
 
-		$this->Socket->configAuth(false);
-		$this->Socket->get('http://example.com/test');
-		$this->assertFalse(strpos($this->Socket->request['header'], 'Authorization:'));
+		$socket->configAuth(false);
+		$socket->get('http://example.com/test');
+		$this->assertFalse(strpos($socket->request['header'], 'Authorization:'));
 
-		$this->Socket->configAuth('Test', 'mark', 'passwd');
-		$this->Socket->get('http://example.com/test');
-		$this->assertTrue(strpos($this->Socket->request['header'], 'Authorization: Test mark.passwd') !== false);
+		$socket->configAuth('Test', 'mark', 'passwd');
+		$socket->get('http://example.com/test');
+		$this->assertTrue(strpos($socket->request['header'], 'Authorization: Test mark.passwd') !== false);
 
-		$this->Socket->configAuth(false);
-		$this->Socket->request(array(
+		$socket->configAuth(false);
+		$socket->request(array(
 			'method' => 'GET',
 			'uri' => 'http://example.com/test',
 			'auth' => array(
@@ -1072,18 +1075,8 @@ class HttpSocketTest extends CakeTestCase {
 				'pass' => 'hunter2'
 			)
 		));
-		$this->assertEquals($this->Socket->request['auth'], array('Basic' => array('user' => 'joel', 'pass' => 'hunter2')));
-		$this->assertTrue(strpos($this->Socket->request['header'], 'Authorization: Basic am9lbDpodW50ZXIy') !== false);
-
-		$this->Socket->configAuth('Basic', 'mark', 'password');
-		$this->Socket->request(array(
-			'method' => 'GET',
-			'uri' => 'http://example.com/test',
-			'header' => array(
-				'Authorization' => 'OtherAuth Hi.There'
-			)
-		));
-		$this->assertPattern('/Authorization: OtherAuth Hi\.There/m', $this->Socket->request['header']);
+		$this->assertEquals($socket->request['auth'], array('Basic' => array('user' => 'joel', 'pass' => 'hunter2')));
+		$this->assertTrue(strpos($socket->request['header'], 'Authorization: Basic am9lbDpodW50ZXIy') !== false);
 	}
 
 /**
@@ -1092,25 +1085,17 @@ class HttpSocketTest extends CakeTestCase {
  * @return void
  */
 	public function testConsecutiveGetResetsAuthCredentials() {
-		$this->Socket->get('http://mark:secret@example.com/test');
-		$this->assertEquals('mark', $this->Socket->request['uri']['user']);
-		$this->assertEquals('secret', $this->Socket->request['uri']['pass']);
-		$this->assertTrue(strpos($this->Socket->request['header'], 'Authorization: Basic bWFyazpzZWNyZXQ=') !== false);
+		$socket = new MockHttpSocket();
+		$socket->get('http://mark:secret@example.com/test');
+		$this->assertEquals('mark', $socket->request['uri']['user']);
+		$this->assertEquals('secret', $socket->request['uri']['pass']);
+		$this->assertTrue(strpos($socket->request['header'], 'Authorization: Basic bWFyazpzZWNyZXQ=') !== false);
 
-		$this->Socket->get('/test2');
-		$this->assertTrue(strpos($this->Socket->request['header'], 'Authorization: Basic bWFyazpzZWNyZXQ=') !== false);
+		$socket->get('/test2');
+		$this->assertTrue(strpos($socket->request['header'], 'Authorization: Basic bWFyazpzZWNyZXQ=') !== false);
 
-		$this->Socket->request(array(
-			'method' => 'GET',
-			'uri' => 'http://example.com/test',
-			'header' => array(
-				'Authorization' => 'OtherAuth Hi.There'
-			)
-		));
-		$this->assertPattern('/Authorization: OtherAuth Hi\.There/m', $this->Socket->request['header']);
-
-		$this->Socket->get('/test3');
-		$this->assertTrue(strpos($this->Socket->request['header'], 'Authorization: Basic bWFyazpzZWNyZXQ=') !== false);
+		$socket->get('/test3');
+		$this->assertTrue(strpos($socket->request['header'], 'Authorization: Basic bWFyazpzZWNyZXQ=') !== false);
 	}
 
 /**
@@ -1159,30 +1144,6 @@ class HttpSocketTest extends CakeTestCase {
 		$this->RequestSocket->put('http://www.google.com/');
 		$this->RequestSocket->put('http://www.google.com/', array('Foo' => 'bar'));
 		$this->RequestSocket->put('http://www.google.com/', null, array('line' => 'Hey Server'));
-	}
-
-/**
- * testPatch
- *
- * @return void
- */
-	public function testPatch() {
-		$this->RequestSocket->reset();
-		$this->RequestSocket->expects($this->at(0))
-			->method('request')
-			->with(array('method' => 'PATCH', 'uri' => 'http://www.google.com/', 'body' => array()));
-
-		$this->RequestSocket->expects($this->at(1))
-			->method('request')
-			->with(array('method' => 'PATCH', 'uri' => 'http://www.google.com/', 'body' => array('Foo' => 'bar')));
-
-		$this->RequestSocket->expects($this->at(2))
-			->method('request')
-			->with(array('method' => 'PATCH', 'uri' => 'http://www.google.com/', 'body' => null, 'line' => 'Hey Server'));
-
-		$this->RequestSocket->patch('http://www.google.com/');
-		$this->RequestSocket->patch('http://www.google.com/', array('Foo' => 'bar'));
-		$this->RequestSocket->patch('http://www.google.com/', null, array('line' => 'Hey Server'));
 	}
 
 /**
@@ -1557,8 +1518,8 @@ class HttpSocketTest extends CakeTestCase {
 					'name' => 'jim',
 					'items' => array(
 						'personal' => array(
-							'book',
-							'pen'
+							'book'
+							, 'pen'
 						),
 						'ball'
 					)
@@ -1645,10 +1606,10 @@ class HttpSocketTest extends CakeTestCase {
 		$this->Socket->reset();
 
 		$expected = array(
-			'\x22', '\x28', '\x29', '\x3c', '\x3e', '\x40', '\x2c', '\x3b', '\x3a', '\x5c', '\x2f', '\x5b', '\x5d', '\x3f', '\x3d', '\x7b',
-			'\x7d', '\x20', '\x00', '\x01', '\x02', '\x03', '\x04', '\x05', '\x06', '\x07', '\x08', '\x09', '\x0a', '\x0b', '\x0c', '\x0d',
-			'\x0e', '\x0f', '\x10', '\x11', '\x12', '\x13', '\x14', '\x15', '\x16', '\x17', '\x18', '\x19', '\x1a', '\x1b', '\x1c', '\x1d',
-			'\x1e', '\x1f', '\x7f'
+			'\x22','\x28','\x29','\x3c','\x3e','\x40','\x2c','\x3b','\x3a','\x5c','\x2f','\x5b','\x5d','\x3f','\x3d','\x7b',
+			'\x7d','\x20','\x00','\x01','\x02','\x03','\x04','\x05','\x06','\x07','\x08','\x09','\x0a','\x0b','\x0c','\x0d',
+			'\x0e','\x0f','\x10','\x11','\x12','\x13','\x14','\x15','\x16','\x17','\x18','\x19','\x1a','\x1b','\x1c','\x1d',
+			'\x1e','\x1f','\x7f'
 		);
 		$r = $this->Socket->tokenEscapeChars();
 		$this->assertEquals($expected, $r);
@@ -1746,11 +1707,9 @@ class HttpSocketTest extends CakeTestCase {
 		$this->Socket->reset();
 		$this->Socket->request('http://example.com');
 		$this->assertTrue($this->Socket->config['context']['ssl']['verify_peer']);
-		$this->assertFalse($this->Socket->config['context']['ssl']['allow_self_signed']);
 		$this->assertEquals(5, $this->Socket->config['context']['ssl']['verify_depth']);
 		$this->assertEquals('example.com', $this->Socket->config['context']['ssl']['CN_match']);
 		$this->assertArrayNotHasKey('ssl_verify_peer', $this->Socket->config);
-		$this->assertArrayNotHasKey('ssl_allow_self_signed', $this->Socket->config);
 		$this->assertArrayNotHasKey('ssl_verify_host', $this->Socket->config);
 		$this->assertArrayNotHasKey('ssl_verify_depth', $this->Socket->config);
 	}
@@ -1764,7 +1723,7 @@ class HttpSocketTest extends CakeTestCase {
 		$this->skipIf(!extension_loaded('openssl'), 'OpenSSL is not enabled cannot test SSL.');
 		$socket = new HttpSocket();
 		try {
-			$socket->get('https://tv.eurosport.com/');
+			$socket->get('https://typography.com');
 			$this->markTestSkipped('Found valid certificate, was expecting invalid certificate.');
 		} catch (SocketException $e) {
 			$message = $e->getMessage();
@@ -1773,43 +1732,4 @@ class HttpSocketTest extends CakeTestCase {
 			$this->assertContains('Failed to enable crypto', $message);
 		}
 	}
-
-/**
- * Data provider for status codes.
- *
- * @return array
- */
-	public function statusProvider() {
-		return array(
-			array('HTTP/1.1 200 ', '200'),
-			array('HTTP/1.1 200    ', '200'),
-			array('HTTP/1.1 200', '200'),
-			array('HTTP/1.1 200  OK', '200', 'OK'),
-			array('HTTP/1.1 404 Not Found', '404', 'Not Found'),
-			array('HTTP/1.1 404    Not Found', '404', 'Not Found'),
-		);
-	}
-
-/**
- * test response status parsing
- *
- * @dataProvider statusProvider
- * @return void
- */
-	public function testResponseStatusParsing($status, $code, $msg = '') {
-		$this->Socket->connected = true;
-		$serverResponse = $status . "\r\nDate: Mon, 16 Apr 2007 04:14:16 GMT\r\nServer: CakeHttp Server\r\n\r\n<h1>This is a test!</h1>";
-		$this->Socket->expects($this->at(1))->method('read')->will($this->returnValue($serverResponse));
-		$this->Socket->expects($this->at(2))->method('read')->will($this->returnValue(false));
-
-		$response = $this->Socket->request('http://www.cakephp.org/');
-		$this->assertInstanceOf('HttpSocketResponse', $response);
-		$expected = array(
-			'http-version' => 'HTTP/1.1',
-			'code' => $code,
-			'reason-phrase' => $msg
-		);
-		$this->assertEquals($expected, $response['status']);
-	}
-
 }

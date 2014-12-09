@@ -22,6 +22,13 @@
 class CakeSessionFixture extends CakeTestFixture {
 
 /**
+ * name property
+ *
+ * @var string
+ */
+	public $name = 'CakeSession';
+
+/**
  * fields property
  *
  * @var array

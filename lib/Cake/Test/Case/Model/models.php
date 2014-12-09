@@ -4,6 +4,8 @@
  *
  * Mock classes for use in Model and related test cases
  *
+ * PHP 5
+ *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -66,7 +68,7 @@ class Test extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -103,7 +105,7 @@ class TestAlias extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -139,7 +141,7 @@ class TestValidate extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -172,7 +174,7 @@ class TestValidate extends CakeTestModel {
  * @return void
  */
 	public function validateNumber($value, $options) {
-		$options += array('min' => 0, 'max' => 100);
+		$options = array_merge(array('min' => 0, 'max' => 100), $options);
 		$valid = ($value['number'] >= $options['min'] && $value['number'] <= $options['max']);
 		return $valid;
 	}
@@ -276,7 +278,7 @@ class Article extends CakeTestModel {
 /**
  * beforeSaveReturn property
  *
- * @var bool
+ * @var bool true
  */
 	public $beforeSaveReturn = true;
 
@@ -548,7 +550,7 @@ class ModifiedComment extends CakeTestModel {
 /**
  * Property used to toggle filtering of results
  *
- * @var bool
+ * @var boolean
  */
 	public $remove = false;
 
@@ -929,10 +931,6 @@ class Post extends CakeTestModel {
  */
 	public $belongsTo = array('Author');
 
-/**
- * @param array $queryData
- * @return bool true
- */
 	public function beforeFind($queryData) {
 		if (isset($queryData['connection'])) {
 			$this->useDbConfig = $queryData['connection'];
@@ -940,11 +938,6 @@ class Post extends CakeTestModel {
 		return true;
 	}
 
-/**
- * @param array $results
- * @param bool $primary
- * @return array results
- */
 	public function afterFind($results, $primary = false) {
 		$this->useDbConfig = 'test';
 		return $results;
@@ -1508,23 +1501,6 @@ class SomethingElse extends CakeTestModel {
  * @var array
  */
 	public $hasAndBelongsToMany = array('Something' => array('with' => 'JoinThing'));
-
-/**
- * afterFind callBack
- *
- * @param array $results
- * @param bool $primary
- * @return array
- */
-	public function afterFind($results, $primary = false) {
-		foreach ($results as $key => $result) {
-			if (!empty($result[$this->alias]) && is_array($result[$this->alias])) {
-				$results[$key][$this->alias]['afterFind'] = 'Successfully added by AfterFind';
-			}
-		}
-		return $results;
-	}
-
 }
 
 /**
@@ -1547,23 +1523,6 @@ class JoinThing extends CakeTestModel {
  * @var array
  */
 	public $belongsTo = array('Something', 'SomethingElse');
-
-/**
- * afterFind callBack
- *
- * @param array $results
- * @param bool $primary
- * @return array
- */
-	public function afterFind($results, $primary = false) {
-		foreach ($results as $key => $result) {
-			if (!empty($result[$this->alias]) && is_array($result[$this->alias])) {
-				$results[$key][$this->alias]['afterFind'] = 'Successfully added by AfterFind';
-			}
-		}
-		return $results;
-	}
-
 }
 
 /**
@@ -2050,28 +2009,28 @@ class CallbackPostTestModel extends CakeTestModel {
 /**
  * variable to control return of beforeValidate
  *
- * @var bool
+ * @var boolean
  */
 	public $beforeValidateReturn = true;
 
 /**
  * variable to control return of beforeSave
  *
- * @var bool
+ * @var boolean
  */
 	public $beforeSaveReturn = true;
 
 /**
  * variable to control return of beforeDelete
  *
- * @var bool
+ * @var boolean
  */
 	public $beforeDeleteReturn = true;
 
 /**
  * beforeSave callback
  *
- * @return bool
+ * @return boolean
  */
 	public function beforeSave($options = array()) {
 		return $this->beforeSaveReturn;
@@ -2080,9 +2039,7 @@ class CallbackPostTestModel extends CakeTestModel {
 /**
  * beforeValidate callback
  *
- * @param array $options Options passed from Model::save().
- * @return bool True if validate operation should continue, false to abort
- * @see Model::save()
+ * @return boolean
  */
 	public function beforeValidate($options = array()) {
 		return $this->beforeValidateReturn;
@@ -2091,7 +2048,7 @@ class CallbackPostTestModel extends CakeTestModel {
 /**
  * beforeDelete callback
  *
- * @return bool
+ * @return boolean
  */
 	public function beforeDelete($cascade = true) {
 		return $this->beforeDeleteReturn;
@@ -2146,7 +2103,7 @@ class TheVoid extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 }
@@ -2168,7 +2125,7 @@ class ValidationTest1 extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -2254,7 +2211,7 @@ class ValidationTest2 extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -2560,6 +2517,7 @@ class MyCategoriesMyProduct extends CakeTestModel {
 	public $name = 'MyCategoriesMyProduct';
 }
 
+
 /**
  * NumberTree class
  *
@@ -2584,8 +2542,8 @@ class NumberTree extends CakeTestModel {
 /**
  * initialize method
  *
- * @param int $levelLimit
- * @param int $childLimit
+ * @param integer $levelLimit
+ * @param integer $childLimit
  * @param mixed $currentLevel
  * @param mixed $parent_id
  * @param string $prefix
@@ -2772,12 +2730,7 @@ class AfterTree extends NumberTree {
  */
 	public $actsAs = array('Tree');
 
-/**
- * @param bool $created
- * @param array $options
- * @return void
- */
-	public function afterSave($created, $options = array()) {
+	public function afterSave($created) {
 		if ($created && isset($this->data['AfterTree'])) {
 			$this->data['AfterTree']['name'] = 'Six and One Half Changed in AfterTree::afterSave() but not in database';
 		}
@@ -3125,7 +3078,7 @@ class TranslatedItem extends CakeTestModel {
 /**
  * cacheQueries property
  *
- * @var bool
+ * @var bool false
  */
 	public $cacheQueries = false;
 
@@ -3162,7 +3115,7 @@ class TranslatedItem2 extends CakeTestModel {
 /**
  * cacheQueries property
  *
- * @var bool
+ * @var bool false
  */
 	public $cacheQueries = false;
 
@@ -3206,7 +3159,7 @@ class TranslatedItemWithTable extends CakeTestModel {
 /**
  * cacheQueries property
  *
- * @var bool
+ * @var bool false
  */
 	public $cacheQueries = false;
 
@@ -3280,7 +3233,7 @@ class TranslatedArticle extends CakeTestModel {
 /**
  * cacheQueries property
  *
- * @var bool
+ * @var bool false
  */
 	public $cacheQueries = false;
 
@@ -3306,7 +3259,7 @@ class TranslatedArticle extends CakeTestModel {
 	public $belongsTo = array('User');
 
 /**
- * hasMany property
+ * belongsTo property
  *
  * @var array
  */
@@ -3519,7 +3472,7 @@ class TransactionTestModel extends CakeTestModel {
 
 	public $useTable = 'samples';
 
-	public function afterSave($created, $options = array()) {
+	public function afterSave($created) {
 		$data = array(
 			array('apple_id' => 1, 'name' => 'sample6'),
 		);
@@ -3534,7 +3487,7 @@ class TransactionManyTestModel extends CakeTestModel {
 
 	public $useTable = 'samples';
 
-	public function afterSave($created, $options = array()) {
+	public function afterSave($created) {
 		$data = array(
 			array('apple_id' => 1, 'name' => 'sample6'),
 		);
@@ -3582,7 +3535,7 @@ class TestModel extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -3657,7 +3610,7 @@ class TestModel2 extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 }
@@ -3679,7 +3632,7 @@ class TestModel3 extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 }
@@ -3708,7 +3661,7 @@ class TestModel4 extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -3792,7 +3745,7 @@ class TestModel4TestModel7 extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -3837,7 +3790,7 @@ class TestModel5 extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -3905,7 +3858,7 @@ class TestModel6 extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -3965,7 +3918,7 @@ class TestModel7 extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -4012,7 +3965,7 @@ class TestModel8 extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -4073,7 +4026,7 @@ class TestModel9 extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -4134,7 +4087,7 @@ class Level extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -4193,7 +4146,7 @@ class Group extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -4253,7 +4206,7 @@ class User2 extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -4325,7 +4278,7 @@ class Category2 extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -4408,7 +4361,7 @@ class Article2 extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -4480,7 +4433,7 @@ class CategoryFeatured2 extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -4528,7 +4481,7 @@ class Featured2 extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -4593,7 +4546,7 @@ class Comment2 extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -4640,7 +4593,7 @@ class ArticleFeatured2 extends CakeTestModel {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -4713,7 +4666,7 @@ class MysqlTestModel extends Model {
 /**
  * useTable property
  *
- * @var bool
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -5028,9 +4981,7 @@ class CustomArticle extends AppModel {
 /**
  * Alters title data
  *
- * @param array $options Options passed from Model::save().
- * @return bool True if validate operation should continue, false to abort
- * @see Model::save()
+ * @return void
  */
 	public function beforeValidate($options = array()) {
 		$this->data[$this->alias]['title'] = 'foo';

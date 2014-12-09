@@ -2,6 +2,8 @@
 /**
  * Short description for file.
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -25,12 +27,18 @@
 class DependencyFixture extends CakeTestFixture {
 
 /**
+ * name property
+ *
+ * @var string 'Dependency'
+ */
+	public $name = 'Dependency';
+
+/**
  * fields property
  *
  * @var array
  */
 	public $fields = array(
-		'id' => 'integer',
 		'child_id' => 'integer',
 		'parent_id' => 'integer'
 	);
@@ -41,6 +49,6 @@ class DependencyFixture extends CakeTestFixture {
  * @var array
  */
 	public $records = array(
-		array('id' => 1, 'child_id' => 1, 'parent_id' => 2),
+		array('child_id' => 1, 'parent_id' => 2),
 	);
 }

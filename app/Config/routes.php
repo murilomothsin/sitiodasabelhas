@@ -4,7 +4,9 @@
  *
  * In this file, you set up routes to your controllers and their actions.
  * Routes are very important mechanism that allows you to freely connect
- * different URLs to chosen controllers and their actions (functions).
+ * different urls to chosen controllers and their actions (functions).
+ *
+ * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -25,12 +27,27 @@
  * to use (in this case, /app/View/Pages/home.ctp)...
  */
 	Router::connect('/', array('controller' => 'pages', 'action' => 'home'));
-/**
- * ...and connect the rest of 'Pages' controller's URLs.
- */
-	Router::connect('/pousada', array('controller' => 'pages', 'action' => 'lodging'));
+
+	Router::connect('/admin', array('controller' => 'users', 'action' => 'login', 'admin' => true));
+	Router::connect('/admin/hotel', array('controller' => 'hotel', 'action' => 'index', 'admin' => true));
+	//Router::connect('/admin', array('controller' => 'users', 'action' => 'login', 'admin' => true));
+	//Router::connect('/admin', array('controller' => 'users', 'action' => 'login', 'admin' => true));
+
+	Router::connect('/pousada', array('controller' => 'pages', 'action' => 'hotel'));
 	Router::connect('/eventos', array('controller' => 'pages', 'action' => 'event'));
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
+
+	// Router::connect('/home', array('controller' => 'welcomes', 'action' => 'index'));
+	// Router::connect('/loja', array('controller' => 'welcomes', 'action' => 'loja'));
+	// Router::connect('/book', array('controller' => 'welcomes', 'action' => 'book'));
+	// Router::connect('/eventos', array('controller' => 'welcomes', 'action' => 'eventos'));
+	// Router::connect('/externas', array('controller' => 'welcomes', 'action' => 'externas'));
+	// Router::connect('/videos', array('controller' => 'welcomes', 'action' => 'videos'));
+	// Router::connect('/contato', array('controller' => 'welcomes', 'action' => 'contato'));
+	//Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'home'));
+/**
+ * ...and connect the rest of 'Pages' controller's urls.
+ */
 
 /**
  * Load all plugin routes. See the CakePlugin documentation on

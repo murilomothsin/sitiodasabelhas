@@ -2,6 +2,8 @@
 /**
  * Short description for file.
  *
+ * PHP 5
+ *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -24,6 +26,13 @@
 class TagFixture extends CakeTestFixture {
 
 /**
+ * name property
+ *
+ * @var string 'Tag'
+ */
+	public $name = 'Tag';
+
+/**
  * fields property
  *
  * @var array
@@ -31,8 +40,8 @@ class TagFixture extends CakeTestFixture {
 	public $fields = array(
 		'id' => array('type' => 'integer', 'key' => 'primary'),
 		'tag' => array('type' => 'string', 'null' => false),
-		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
-		'updated' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'created' => 'datetime',
+		'updated' => 'datetime'
 	);
 
 /**

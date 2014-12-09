@@ -2,6 +2,8 @@
 /**
  * The FixtureTask handles creating and updating fixture files.
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -60,14 +62,13 @@ class FixtureTask extends BakeTask {
 	}
 
 /**
- * Gets the option parser instance and configures it.
+ * get the option parser.
  *
- * @return ConsoleOptionParser
+ * @return void
  */
 	public function getOptionParser() {
 		$parser = parent::getOptionParser();
-
-		$parser->description(
+		return $parser->description(
 			__d('cake_console', 'Generate fixtures for use with the test suite. You can use `bake fixture all` to bake all fixtures.')
 		)->addArgument('name', array(
 			'help' => __d('cake_console', 'Name of the fixture to bake. Can use Plugin.name to bake plugin fixtures.')
@@ -81,27 +82,12 @@ class FixtureTask extends BakeTask {
 			'default' => 'default'
 		))->addOption('plugin', array(
 			'help' => __d('cake_console', 'CamelCased name of the plugin to bake fixtures for.'),
-			'short' => 'p'
-		))->addOption('schema', array(
-			'help' => __d('cake_console', 'Importing schema for fixtures rather than hardcoding it.'),
-			'short' => 's',
-			'boolean' => true
-		))->addOption('theme', array(
-			'short' => 't',
-			'help' => __d('cake_console', 'Theme to use when baking code.')
-		))->addOption('force', array(
-			'short' => 'f',
-			'help' => __d('cake_console', 'Force overwriting existing files without prompting.')
+			'short' => 'p',
 		))->addOption('records', array(
-			'help' => __d('cake_console', 'Used with --count and <name>/all commands to pull [n] records from the live tables, ' .
-				'where [n] is either --count or the default of 10.'),
+			'help' => __d('cake_console', 'Used with --count and <name>/all commands to pull [n] records from the live tables, where [n] is either --count or the default of 10'),
 			'short' => 'r',
 			'boolean' => true
-		))->epilog(
-			__d('cake_console', 'Omitting all arguments and options will enter into an interactive mode.')
-		);
-
-		return $parser;
+		))->epilog(__d('cake_console', 'Omitting all arguments and options will enter into an interactive mode.'));
 	}
 
 /**
@@ -138,14 +124,9 @@ class FixtureTask extends BakeTask {
 		$this->interactive = false;
 		$this->Model->interactive = false;
 		$tables = $this->Model->listAll($this->connection, false);
-
 		foreach ($tables as $table) {
 			$model = $this->_modelName($table);
-			$importOptions = array();
-			if (!empty($this->params['schema'])) {
-				$importOptions['schema'] = $model;
-			}
-			$this->bake($model, false, $importOptions);
+			$this->bake($model);
 		}
 	}
 
@@ -177,20 +158,11 @@ class FixtureTask extends BakeTask {
  */
 	public function importOptions($modelName) {
 		$options = array();
-
-		if (!empty($this->params['schema'])) {
+		$doSchema = $this->in(__d('cake_console', 'Would you like to import schema for this fixture?'), array('y', 'n'), 'n');
+		if ($doSchema === 'y') {
 			$options['schema'] = $modelName;
-		} else {
-			$doSchema = $this->in(__d('cake_console', 'Would you like to import schema for this fixture?'), array('y', 'n'), 'n');
-			if ($doSchema === 'y') {
-				$options['schema'] = $modelName;
-			}
 		}
-		if (!empty($this->params['records'])) {
-			$doRecords = 'y';
-		} else {
-			$doRecords = $this->in(__d('cake_console', 'Would you like to use record importing for this fixture?'), array('y', 'n'), 'n');
-		}
+		$doRecords = $this->in(__d('cake_console', 'Would you like to use record importing for this fixture?'), array('y', 'n'), 'n');
 		if ($doRecords === 'y') {
 			$options['records'] = true;
 		}
@@ -247,7 +219,7 @@ class FixtureTask extends BakeTask {
 		}
 
 		$tableInfo = $data['tables'][$useTable];
-		if ($modelImport === null) {
+		if (is_null($modelImport)) {
 			$schema = $this->_generateSchema($tableInfo);
 		}
 
@@ -316,7 +288,7 @@ class FixtureTask extends BakeTask {
  * Generate String representation of Records
  *
  * @param array $tableInfo Table schema array
- * @param int $recordCount The number of records to generate.
+ * @param integer $recordCount
  * @return array Array of records to use in the fixture.
  */
 	protected function _generateRecords($tableInfo, $recordCount = 1) {
@@ -332,7 +304,7 @@ class FixtureTask extends BakeTask {
 					case 'integer':
 					case 'float':
 						$insert = $i + 1;
-						break;
+					break;
 					case 'string':
 					case 'binary':
 						$isPrimaryUuid = (
@@ -347,22 +319,22 @@ class FixtureTask extends BakeTask {
 								$insert = substr($insert, 0, (int)$fieldInfo['length'] - 2);
 							}
 						}
-						break;
+					break;
 					case 'timestamp':
 						$insert = time();
-						break;
+					break;
 					case 'datetime':
 						$insert = date('Y-m-d H:i:s');
-						break;
+					break;
 					case 'date':
 						$insert = date('Y-m-d');
-						break;
+					break;
 					case 'time':
 						$insert = date('H:i:s');
-						break;
+					break;
 					case 'boolean':
 						$insert = 1;
-						break;
+					break;
 					case 'text':
 						$insert = "Lorem ipsum dolor sit amet, aliquet feugiat.";
 						$insert .= " Convallis morbi fringilla gravida,";
@@ -371,7 +343,7 @@ class FixtureTask extends BakeTask {
 						$insert .= " vestibulum massa neque ut et, id hendrerit sit,";
 						$insert .= " feugiat in taciti enim proin nibh, tempor dignissim, rhoncus";
 						$insert .= " duis vestibulum nunc mattis convallis.";
-						break;
+					break;
 				}
 				$record[$field] = $insert;
 			}
@@ -381,7 +353,7 @@ class FixtureTask extends BakeTask {
 	}
 
 /**
- * Convert a $records array into a string.
+ * Convert a $records array into a a string.
  *
  * @param array $records Array of records to be converted to string
  * @return string A string value of the $records array.

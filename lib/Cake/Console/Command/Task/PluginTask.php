@@ -2,6 +2,8 @@
 /**
  * The Plugin Task handles creating an empty plugin, ready to be used
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -63,8 +65,9 @@ class PluginTask extends AppShell {
 				$this->out(__d('cake_console', 'Plugin: %s already exists, no action taken', $plugin));
 				$this->out(__d('cake_console', 'Path: %s', $pluginPath));
 				return false;
+			} else {
+				$this->_interactive($plugin);
 			}
-			$this->_interactive($plugin);
 		} else {
 			return $this->_interactive();
 		}
@@ -73,7 +76,7 @@ class PluginTask extends AppShell {
 /**
  * Interactive interface
  *
- * @param string $plugin The plugin name.
+ * @param string $plugin
  * @return void
  */
 	protected function _interactive($plugin = null) {
@@ -90,7 +93,7 @@ class PluginTask extends AppShell {
  * Bake the plugin, create directories and files
  *
  * @param string $plugin Name of the plugin in CamelCased format
- * @return bool
+ * @return boolean
  */
 	public function bake($plugin) {
 		$pathOptions = App::path('plugins');
@@ -184,18 +187,16 @@ class PluginTask extends AppShell {
 /**
  * find and change $this->path to the user selection
  *
- * @param array $pathOptions The list of paths to look in.
+ * @param array $pathOptions
  * @return void
  */
 	public function findPath($pathOptions) {
 		$valid = false;
 		foreach ($pathOptions as $i => $path) {
 			if (!is_dir($path)) {
-				unset($pathOptions[$i]);
+				array_splice($pathOptions, $i, 1);
 			}
 		}
-		$pathOptions = array_values($pathOptions);
-
 		$max = count($pathOptions);
 		while (!$valid) {
 			foreach ($pathOptions as $i => $option) {
@@ -203,7 +204,7 @@ class PluginTask extends AppShell {
 			}
 			$prompt = __d('cake_console', 'Choose a plugin path from the paths above.');
 			$choice = $this->in($prompt, null, 1);
-			if ((int)$choice > 0 && (int)$choice <= $max) {
+			if (intval($choice) > 0 && intval($choice) <= $max) {
 				$valid = true;
 			}
 		}
@@ -211,21 +212,18 @@ class PluginTask extends AppShell {
 	}
 
 /**
- * Gets the option parser instance and configures it.
+ * get the option parser for the plugin task
  *
- * @return ConsoleOptionParser
+ * @return void
  */
 	public function getOptionParser() {
 		$parser = parent::getOptionParser();
-
-		$parser->description(
-			__d('cake_console',	'Create the directory structure, AppModel and AppController classes for a new plugin. ' .
-			'Can create plugins in any of your bootstrapped plugin paths.')
-		)->addArgument('name', array(
+		return $parser->description(__d('cake_console',
+			'Create the directory structure, AppModel and AppController classes for a new plugin. ' .
+			'Can create plugins in any of your bootstrapped plugin paths.'
+		))->addArgument('name', array(
 			'help' => __d('cake_console', 'CamelCased name of the plugin to create.')
 		));
-
-		return $parser;
 	}
 
 }

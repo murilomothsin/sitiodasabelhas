@@ -2,6 +2,8 @@
 /**
  * Short description for file.
  *
+ * PHP 5
+ *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -24,9 +26,16 @@
 class TranslateArticleFixture extends CakeTestFixture {
 
 /**
+ * name property
+ *
+ * @var string 'Translate'
+ */
+	public $name = 'TranslateArticle';
+
+/**
  * table property
  *
- * @var string
+ * @var string 'i18n'
  */
 	public $table = 'article_i18n';
 

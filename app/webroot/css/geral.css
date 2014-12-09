@@ -1,0 +1,209 @@
+#header .columns ul li a {
+	color: #000;
+	text-align: center;
+	margin-top: 30px;
+	display: inline-block;
+	font-size: 18px;
+}
+
+.date div {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.logo {
+	padding-top: 5px;
+}
+
+.desenvolvedor{
+	font-size: 12px;
+	color: #C1C1C1;
+}
+.desenvolvedor:hover{
+	color: #333;
+}
+.menu {
+	color: #000;
+	font-size: 14px;
+}
+.menu:hover {
+	color: #000;
+	text-decoration: none;
+}
+
+.googleplus, .facebook, .youtube { color: #333333; margin-top: -5px;}
+.blogger {
+	background-image: url("../img/iconmonstr-blogger-icon.png");
+	background-repeat: no-repeat;
+	margin-bottom: -10px;
+	height: 25px;
+	width: 40px;
+}
+.blogger:hover { background-image: url("../img/iconmonstr-blogger-icon-color.png"); }
+.googleplus:hover { color: #DB4936; text-decoration: none; }
+.facebook:hover { color: #3B5998; text-decoration: none; }
+.youtube:hover { color: #CB322C; text-decoration: none; }
+
+
+.PreviewImg {
+	float: right;
+	width: 150px;
+	border: 1px solid #CCC;
+}
+
+.InputDate select {
+	width: 30%;
+	float: left;
+}
+
+#myCarousel {
+	width: 84%;
+}
+.loja {
+	width: 69% !important;
+}
+.carousel-control {
+	top: 30%;
+	border-radius: 0px;
+	height: 200px;
+	vertical-align: middle;
+	opacity: 0.1;
+	display: table;
+}
+.carousel-control:hover {
+	opacity: 0.5;
+}
+.control1 {
+	display: table-cell;
+    vertical-align: middle;
+}
+
+
+/* Large desktop */
+@media (min-width: 1200px) {
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {
+	#header .columns ul li a {
+		color: #000;
+		text-align: center;
+		margin-top: 30px;
+		display: inline-block;
+		font-size: 18px;
+	}
+
+	.date div {
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	.PreviewImg {
+		float: right;
+		width: 150px;
+		border: 1px solid #CCC;
+	}
+
+	.InputDate select {
+		width: 30%;
+		float: left;
+	}
+
+	.carousel-control {
+		top: 30%;
+		border-radius: 0px;
+		height: 200px;
+		vertical-align: middle;
+		opacity: 0.2;
+		display: table;
+	}
+	.control1 {
+		display: table-cell;
+	    vertical-align: middle;
+	}
+}
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+	#header .columns ul li a {
+		color: #000;
+		text-align: center;
+		margin-top: 30px;
+		display: inline-block;
+		font-size: 18px;
+	}
+
+	.date div {
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	.PreviewImg {
+		float: right;
+		width: 150px;
+		border: 1px solid #CCC;
+	}
+
+	.InputDate select {
+		width: 30%;
+		float: left;
+	}
+	.loja {
+		width: 100%;
+	}
+	.carousel-control {
+		top: 20%;
+		border-radius: 0px;
+		height: 180px;
+		vertical-align: middle;
+		opacity: 0.2;
+		display: table;
+	}
+	.carousel-control:hover {
+		opacity: 0.5;
+	}
+	.control1 {
+		display: table-cell;
+	    vertical-align: middle;
+	}
+}
+
+/* Landscape phones and down */
+@media (max-width: 480px) {
+	#header .columns ul li a {
+		color: #000;
+		text-align: center;
+		margin-top: 30px;
+		display: inline-block;
+		font-size: 18px;
+	}
+
+	.date div {
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	.PreviewImg {
+		float: right;
+		width: 150px;
+		border: 1px solid #CCC;
+	}
+
+	.InputDate select {
+		width: 30%;
+		float: left;
+	}
+
+	.carousel-control {
+		top: 30%;
+		border-radius: 0px;
+		height: 200px;
+		vertical-align: middle;
+		opacity: 0.2;
+		display: table;
+	}
+	.control1 {
+		display: table-cell;
+	    vertical-align: middle;
+	}
+}

@@ -1,0 +1,84 @@
+Albuns
+->Possui muitas Fotos
+->Lugar
+->Fotografo
+->data
+->Titulo
+->Descrição
+->Quem foi fotografado
+->Pertence a uma "Categoria"
+
+CREATE TABLE IF NOT EXISTS `albuns` (
+   `id` int(11) NOT NULL AUTO_INCREMENT,
+   `title` varchar(60) NOT NULL,
+   `description` text NOT NULL,
+   `place` varchar(30) NOT NULL,
+   `photographer` varchar(50) NOT NULL,
+   `model` varchar(50) NOT NULL,
+   `when` date NOT NULL,
+   `categoria_id` int(11) NOT NULL,
+   `created` datetime NOT NULL,
+   `modified` datetime NOT NULL,
+   PRIMARY KEY (`id`))
+   ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+Categoria
+->Tem Albuns
+->Nome
+->Descrição
+
+CREATE TABLE IF NOT EXISTS `categorias` (
+   `id` int(11) NOT NULL AUTO_INCREMENT,
+   `categoria` varchar(20) NOT NULL UNIQUE,
+   `description` text NOT NULL,
+   `created` datetime NOT NULL,
+   `modified` datetime NOT NULL,
+   PRIMARY KEY (`id`))
+   ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+Fotos
+->Pertence a um album
+->Criado em
+->Modificado em
+
+CREATE TABLE IF NOT EXISTS `pictures` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) NOT NULL,
+  `dir` varchar(255) NOT NULL,
+  `picture_name` varchar(200) NOT NULL,
+  `album_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+Grupo
+->Tem usuarios
+->Nome
+
+CREATE TABLE IF NOT EXISTS `grupos` (
+   `id` int(11) NOT NULL AUTO_INCREMENT,
+   `grupo` varchar(25) NOT NULL UNIQUE,
+   `created` datetime NOT NULL,
+   `modified` datetime NOT NULL,
+   PRIMARY KEY (`id`))
+   ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+Usuarios
+->Pertence a um grupo
+->Nome
+
+CREATE TABLE IF NOT EXISTS `usuarios` (
+   `id` int(11) NOT NULL AUTO_INCREMENT,
+   `nome` varchar(50) NOT NULL UNIQUE,
+   `username` varchar(50) NOT NULL UNIQUE,
+   `password` varchar(15) NOT NULL,
+   `email` varchar(50) NOT NULL,
+   `grupo_id` int(11) NOT NULL,
+   `created` datetime NOT NULL,
+   `modified` datetime NOT NULL,
+   PRIMARY KEY (`id`))
+   ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -2,6 +2,8 @@
 /**
  * Internationalization
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -74,7 +76,7 @@ class I18n {
  * Set to true when I18N::_bindTextDomain() is called for the first time.
  * If a translation file is found it is set to false again
  *
- * @var bool
+ * @var boolean
  */
 	protected $_noLocale = false;
 
@@ -88,68 +90,6 @@ class I18n {
 	);
 
 /**
- * Constants for the translation categories.
- *
- * The constants may be used in translation fetching
- * instead of hardcoded integers.
- * Example:
- * {{{
- *	I18n::translate('CakePHP is awesome.', null, null, I18n::LC_MESSAGES)
- * }}}
- *
- * To keep the code more readable, I18n constants are preferred over
- * hardcoded integers.
- */
-/**
- * Constant for LC_ALL.
- *
- * @var int
- */
-	const LC_ALL = 0;
-
-/**
- * Constant for LC_COLLATE.
- *
- * @var int
- */
-	const LC_COLLATE = 1;
-
-/**
- * Constant for LC_CTYPE.
- *
- * @var int
- */
-	const LC_CTYPE = 2;
-
-/**
- * Constant for LC_MONETARY.
- *
- * @var int
- */
-	const LC_MONETARY = 3;
-
-/**
- * Constant for LC_NUMERIC.
- *
- * @var int
- */
-	const LC_NUMERIC = 4;
-
-/**
- * Constant for LC_TIME.
- *
- * @var int
- */
-	const LC_TIME = 5;
-
-/**
- * Constant for LC_MESSAGES.
- *
- * @var int
- */
-	const LC_MESSAGES = 6;
-
-/**
  * Escape string
  *
  * @var string
@@ -158,6 +98,8 @@ class I18n {
 
 /**
  * Constructor, use I18n::getInstance() to get the i18n translation object.
+ *
+ * @return void
  */
 	public function __construct() {
 		$this->l10n = new L10n();
@@ -182,16 +124,14 @@ class I18n {
  *
  * @param string $singular String to translate
  * @param string $plural Plural string (if any)
- * @param string $domain Domain The domain of the translation. Domains are often used by plugin translations.
- *    If null, the default domain will be used.
+ * @param string $domain Domain The domain of the translation. Domains are often used by plugin translations
  * @param string $category Category The integer value of the category to use.
- * @param int $count Count Count is used with $plural to choose the correct plural form.
+ * @param integer $count Count Count is used with $plural to choose the correct plural form.
  * @param string $language Language to translate string to.
- *    If null it checks for language in session followed by Config.language configuration variable.
+ * 	If null it checks for language in session followed by Config.language configuration variable.
  * @return string translated string.
- * @throws CakeException When '' is provided as a domain.
  */
-	public static function translate($singular, $plural = null, $domain = null, $category = self::LC_MESSAGES, $count = null, $language = null) {
+	public static function translate($singular, $plural = null, $domain = null, $category = 6, $count = null, $language = null) {
 		$_this = I18n::getInstance();
 
 		if (strpos($singular, "\r\n") !== false) {
@@ -219,11 +159,8 @@ class I18n {
 			$_this->_lang = $lang;
 		}
 
-		if ($domain === null) {
+		if (is_null($domain)) {
 			$domain = self::$defaultDomain;
-		}
-		if ($domain === '') {
-			throw new CakeException(__d('cake_dev', 'You cannot use "" as a domain.'));
 		}
 
 		$_this->domain = $domain . '_' . $_this->l10n->lang;
@@ -309,8 +246,8 @@ class I18n {
  * Attempts to find the plural form of a string.
  *
  * @param string $header Type
- * @param int $n Number
- * @return int plural match
+ * @param integer $n Number
+ * @return integer plural match
  */
 	protected function _pluralGuess($header, $n) {
 		if (!is_string($header) || $header === "nplurals=1;plural=0;" || !isset($header[0])) {
@@ -384,7 +321,7 @@ class I18n {
 				if (is_file($localeDef)) {
 					$definitions = self::loadLocaleDefinition($localeDef);
 					if ($definitions !== false) {
-						$this->_domains[$domain][$this->_lang][$this->category] = $definitions;
+						$this->_domains[$domain][$this->_lang][$this->category] = self::loadLocaleDefinition($localeDef);
 						$this->_noLocale = false;
 						return $domain;
 					}
@@ -607,11 +544,11 @@ class I18n {
 				continue;
 			}
 			$count = count($parts);
-			if ($count === 2) {
+			if ($count == 2) {
 				$currentToken = $parts[0];
 				$value = $parts[1];
-			} elseif ($count === 1) {
-				$value = is_array($value) ? $parts[0] : $value . $parts[0];
+			} elseif ($count == 1) {
+				$value .= $parts[0];
 			} else {
 				continue;
 			}
@@ -633,7 +570,7 @@ class I18n {
 				$val = str_replace($replacements, $mustEscape, $val);
 				$value[$i] = $val;
 			}
-			if (count($value) === 1) {
+			if (count($value) == 1) {
 				$definitions[$currentToken] = array_pop($value);
 			} else {
 				$definitions[$currentToken] = $value;

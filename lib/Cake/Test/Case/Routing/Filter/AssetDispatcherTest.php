@@ -3,8 +3,7 @@
  * CakePHP(tm) Tests <http://book.cakephp.org/view/1196/Testing>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
+ * Licensed under The Open Group Test Suite License
  * Redistributions of files must retain the above copyright notice.
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -31,7 +30,6 @@ class AssetDispatcherTest extends CakeTestCase {
  * @return void
  */
 	public function tearDown() {
-		parent::tearDown();
 		Configure::write('Dispatcher.filters', array());
 	}
 
@@ -50,7 +48,7 @@ class AssetDispatcherTest extends CakeTestCase {
 		App::build(array(
 			'Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS),
 			'View' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS)
-		), App::RESET);
+		), APP::RESET);
 
 		$request = new CakeRequest('theme/test_theme/ccss/cake.generic.css');
 		$event = new CakeEvent('DispatcherTest', $this, compact('request', 'response'));
@@ -81,33 +79,6 @@ class AssetDispatcherTest extends CakeTestCase {
 		$event = new CakeEvent('DispatcherTest', $this, compact('request', 'response'));
 		$this->assertNull($filter->beforeDispatch($event));
 		$this->assertFalse($event->isStopped());
-	}
-
-/**
- * AssetDispatcher should not 404 extensions that could be handled
- * by Routing.
- *
- * @return void
- */
-	public function testNoHandleRoutedExtension() {
-		$filter = new AssetDispatcher();
-		$response = $this->getMock('CakeResponse', array('_sendHeader'));
-		Configure::write('Asset.filter', array(
-			'js' => '',
-			'css' => ''
-		));
-		App::build(array(
-			'Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS),
-			'View' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS)
-		), App::RESET);
-		Router::parseExtensions('json');
-		Router::connect('/test_plugin/api/v1/:action', array('controller' => 'api'));
-		CakePlugin::load('TestPlugin');
-
-		$request = new CakeRequest('test_plugin/api/v1/forwarding.json');
-		$event = new CakeEvent('DispatcherTest', $this, compact('request', 'response'));
-		$this->assertNull($filter->beforeDispatch($event));
-		$this->assertFalse($event->isStopped(), 'Events for routed extensions should not be stopped');
 	}
 
 /**
@@ -157,7 +128,7 @@ class AssetDispatcherTest extends CakeTestCase {
 	}
 
 /**
- * Test that no exceptions are thrown for //index.php type URLs.
+ * Test that no exceptions are thrown for //index.php type urls.
  *
  * @return void
  */
@@ -168,50 +139,6 @@ class AssetDispatcherTest extends CakeTestCase {
 		$request = new CakeRequest('//index.php');
 		$event = new CakeEvent('Dispatcher.beforeRequest', $this, compact('request', 'response'));
 
-		$this->assertNull($filter->beforeDispatch($event));
-		$this->assertFalse($event->isStopped());
-	}
-
-/**
- * Test that attempts to traverse directories are prevented.
- *
- * @return void
- */
-	public function test404OnDoubleDot() {
-		App::build(array(
-			'Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS),
-			'View' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS)
-		), App::RESET);
-
-		$response = $this->getMock('CakeResponse', array('_sendHeader'));
-		$request = new CakeRequest('theme/test_theme/../../../../../../VERSION.txt');
-		$event = new CakeEvent('Dispatcher.beforeRequest', $this, compact('request', 'response'));
-
-		$response->expects($this->never())->method('send');
-
-		$filter = new AssetDispatcher();
-		$this->assertNull($filter->beforeDispatch($event));
-		$this->assertFalse($event->isStopped());
-	}
-
-/**
- * Test that attempts to traverse directories with urlencoded paths fail.
- *
- * @return void
- */
-	public function test404OnDoubleDotEncoded() {
-		App::build(array(
-			'Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS),
-			'View' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS)
-		), App::RESET);
-
-		$response = $this->getMock('CakeResponse', array('_sendHeader', 'send'));
-		$request = new CakeRequest('theme/test_theme/%2e./%2e./%2e./%2e./%2e./%2e./VERSION.txt');
-		$event = new CakeEvent('Dispatcher.beforeRequest', $this, compact('request', 'response'));
-
-		$response->expects($this->never())->method('send');
-
-		$filter = new AssetDispatcher();
 		$this->assertNull($filter->beforeDispatch($event));
 		$this->assertFalse($event->isStopped());
 	}

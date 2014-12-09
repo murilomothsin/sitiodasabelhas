@@ -2,6 +2,8 @@
 /**
  * Short description for file.
  *
+ * PHP 5
+ *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -22,6 +24,13 @@
  * @package       Cake.Test.Fixture
  */
 class UuidTagFixture extends CakeTestFixture {
+
+/**
+ * name property
+ *
+ * @var string 'UuidTag'
+ */
+	public $name = 'UuidTag';
 
 /**
  * fields property

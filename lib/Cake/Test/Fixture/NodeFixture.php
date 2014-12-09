@@ -2,6 +2,8 @@
 /**
  * Short description for file.
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -23,6 +25,13 @@
  * @since         CakePHP(tm) v 1.2.0.6879 //Correct version number as needed**
  */
 class NodeFixture extends CakeTestFixture {
+
+/**
+ * name property
+ *
+ * @var string 'Node'
+ */
+	public $name = 'Node';
 
 /**
  * fields property

@@ -4,6 +4,8 @@
  *
  * Provides an interface for loading and enumerating connections defined in app/Config/database.php
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -54,7 +56,7 @@ class ConnectionManager {
 /**
  * Indicates if the init code for this class has already been executed
  *
- * @var bool
+ * @var boolean
  */
 	protected static $_init = false;
 
@@ -147,7 +149,7 @@ class ConnectionManager {
  * @param string|array $connName A string name of the connection, as defined in app/Config/database.php,
  *                        or an array containing the filename (without extension) and class name of the object,
  *                        to be found in app/Model/Datasource/ or lib/Cake/Model/Datasource/.
- * @return bool True on success, null on failure or false if the class is already loaded
+ * @return boolean True on success, null on failure or false if the class is already loaded
  * @throws MissingDatasourceException
  */
 	public static function loadDataSource($connName) {
@@ -221,7 +223,7 @@ class ConnectionManager {
  * Removes a connection configuration at runtime given its name
  *
  * @param string $name the connection name as it was created
- * @return bool success if connection was removed, false if it does not exist
+ * @return boolean success if connection was removed, false if it does not exist
  */
 	public static function drop($name) {
 		if (empty(self::$_init)) {
