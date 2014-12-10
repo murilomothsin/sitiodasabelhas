@@ -2,7 +2,7 @@
 
 	class Hotel extends AppModel {
 
-		public $userTable = 'hotel';
+		public $useTable = 'hotel';
 
 		public $name = 'Hotel';
 

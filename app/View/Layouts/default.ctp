@@ -19,13 +19,15 @@ $cakeVersion = __d('cake_dev', 'Sítio das abelhas - 2014')
 
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
+
 		echo $this->fetch('script');
+
 	?>
 </head>
 <body>
 	<div id="container" class="container-fluid">
 
-		<div id="header" class="row">
+		<div id="header" class="row" style="background-color: #FFF;">
 			<div class="col-md-4 logo">
 				<center><?php echo $this->Html->link($this->Html->image('logo.jpg', array('alt' => 'Sitio das abelhas', 'height' => '75')), '/', array('escape' => false)); ?></center>
 			</div>
@@ -41,14 +43,14 @@ $cakeVersion = __d('cake_dev', 'Sítio das abelhas - 2014')
 			</div>
 		</div>
 
-		<div id="content" class="row">
+		<div id="content" class="row"  style="background-color: #FFF;">
 			<?php echo $this->Session->flash(); ?>
 			<div class="col-md-12">
 				<?php echo $this->fetch('content'); ?>
 			</div>
 		</div>
 
-		<div id="footer" class="row">
+		<div id="footer" class="row"  style="background-color: #FFF;">
 			<div class="col-md-offset-4 col-md-4">
 				<p>
 					<?php echo $cakeVersion; ?>
@@ -57,5 +59,9 @@ $cakeVersion = __d('cake_dev', 'Sítio das abelhas - 2014')
 		</div>
 
 	</div>
+	<?php
+		echo $this->Html->script('vendor/jquery');
+		echo $this->Html->script('bootstrap/bootstrap-dropdown');
+	?>
 </body>
 </html>

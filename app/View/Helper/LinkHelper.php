@@ -11,10 +11,10 @@
 			<div>
 				<ul class="nav nav-pills">
 					<li class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Albums<b class="caret"></b></a>
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Pousada/Cabana<b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li>'.$this->Html->link('Lista', array('controller' => 'albums', 'action' => 'index')).'</li>
-							<li>'.$this->Html->link('Adicionar', array('controller' => 'albums', 'action' => 'add')).'</li>
+							<li>'.$this->Html->link('Lista', array('controller' => 'hotel', 'action' => 'index')).'</li>
+							<li>'.$this->Html->link('Adicionar', array('controller' => 'hotel', 'action' => 'add')).'</li>
 						</ul>
 					</li>
 					<li class="dropdown">
@@ -22,20 +22,6 @@
 						<ul class="dropdown-menu">
 							<li>'.$this->Html->link('Lista', array('controller' => 'users', 'action' => 'index')).'</li>
 							<li>'.$this->Html->link('Adicionar', array('controller' => 'users', 'action' => 'add')).'</li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Videos<b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li>'.$this->Html->link('Lista', array('controller' => 'videos', 'action' => 'index')).'</li>
-							<li>'.$this->Html->link('Adicionar', array('controller' => 'videos', 'action' => 'add')).'</li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Categorias<b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li>'.$this->Html->link('Lista', array('controller' => 'categories', 'action' => 'index')).'</li>
-							<li>'.$this->Html->link('Adicionar', array('controller' => 'categories', 'action' => 'add')).'</li>
 						</ul>
 					</li>
 					<li class="dropdown">

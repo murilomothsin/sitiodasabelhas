@@ -3,7 +3,7 @@
 	<?php echo $this->Link->makeLink(); ?>
 
 	<div class="large-12 columns">
-		<legend><?php echo __('Albuns'); ?></legend>
+		<legend><?php echo __('Pousada/Cabanas'); ?></legend>
 	</div>
 </div>
 <div class="row">
@@ -15,30 +15,22 @@
 					<th style="width: 25%;">Titulo</th>
 					<th style="width: 15%;">Descrição</th>
 					<th style="width: 8%;">Local</th>
-					<th style="width: 10%;">Fotografo</th>
-					<th style="width: 10%;">modelo</th>
-					<th style="width: 7%;">Quando</th>
-					<th style="width: 7%;">Categoria</th>
 					<th style="width: 4%;">&nbsp;</th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php
-				foreach ($albums as $album) {
+				foreach ($hotels as $hotel) {
 				?>
 				<tr>
-					<td><?php echo $album['Album']['id']; ?></td>
-					<td><?php echo $album['Album']['title']; ?></td>
-					<td><?php echo $album['Album']['description']; ?></td>
-					<td><?php echo $album['Album']['place']; ?></td>
-					<td><?php echo $album['Album']['photographer']; ?></td>
-					<td><?php echo $album['Album']['model']; ?></td>
-					<td><?php echo $album['Album']['when']; ?></td>
-					<td><?php echo $album['Category']['category']; ?></td>
+					<td><?php echo $hotel['Hotel']['id']; ?></td>
+					<td><?php echo $hotel['Hotel']['title']; ?></td>
+					<td><?php echo $hotel['Hotel']['description']; ?></td>
+					<td><?php echo $hotel['Hotel']['place']; ?></td>
 					<td>
 					<?php
-						echo $this->Html->link('<i class="icon-pencil"></i>', array('action' => 'edit', $album['Album']['id']), array('escape' => false, 'style' => 'padding: 3px'));
-						echo $this->Form->postLink('<i class="icon-trash"></i>', array('action' => 'delete', $album['Album']['id']), array('confirm' => 'Você tem certeza que quer excluir este album?',
+						echo $this->Html->link('<i class="icon-pencil"></i>', array('action' => 'edit', $hotel['Hotel']['id']), array('escape' => false, 'style' => 'padding: 3px'));
+						echo $this->Form->postLink('<i class="icon-trash"></i>', array('action' => 'delete', $hotel['Hotel']['id']), array('confirm' => 'Você tem certeza que quer excluir esta cabana?',
 						'escape' => false, 'style' => 'padding: 3px'));
 					?>
 					</td>

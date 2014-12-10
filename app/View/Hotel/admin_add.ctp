@@ -3,16 +3,16 @@
 <div class="row">
 	<div class="span12">
 	<?php $timeInit = date('dmoHis'); ?>
-	<?php echo $this->Form->create('Album', array('type'=>'file')); ?>
+	<?php echo $this->Form->create('Hotel', array('type'=>'file')); ?>
 	<fieldset>
 		<legend>Adicionar</legend>
-		<?php 
-			echo $this->element('form_albums');
-			echo $this->Form->input('Picture.0.title', array( 'class' => 'input-xlarge', 
+		<?php
+			echo $this->element('form_hotels');
+			echo $this->Form->input('Picture.0.title', array( 'class' => 'input-xlarge',
 													'label' => 'Título da Foto da Capa',
 													'placeholder' => 'Título da foto',
 													'error' => array(
-													'wrap' => 'div', 
+													'wrap' => 'div',
 													'class' => 'formerror'
 													)
 									            ));
@@ -26,7 +26,7 @@
 			<a href="javascript:$('#fileInput').uploadify('upload','*')">Upload Files</a>
 		</div>
 	</fieldset>
-	<?php 
+	<?php
 		$options = array(
 			'label' => 'Enviar',
 			'class' => 'btn btn-large btn-primary'
@@ -36,8 +36,8 @@
 	</div>
 </div>
 
-<?php echo $this->Html->script('vendor/jquery'); 
-echo $this->Html->script('uploadify/jquery.uploadify.min'); 
+<?php echo $this->Html->script('vendor/jquery');
+echo $this->Html->script('uploadify/jquery.uploadify.min');
 ?>
 
 <script type="text/javascript">

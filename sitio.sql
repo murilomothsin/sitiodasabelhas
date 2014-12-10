@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table sitio.users: ~0 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `name`, `username`, `password`, `role`, `group_id`, `email`, `created`, `modified`) VALUES
-	(1, 'Murilo Mothsin', 'murilo', '5a1d2685cd443bf8e249c34802d4c2ca', 'author', 1, 'mothsin@hotmail.com', '2013-07-02 23:51:40', '2013-07-07 21:33:14'),
+	(1, 'Murilo Mothsin', 'murilo', '1dbbab28fb023c2f284dc3ebdf85c421', 'author', 1, 'mothsin@hotmail.com', '2013-07-02 23:51:40', '2013-07-07 21:33:14'),
 	(2, 'admin', 'admin', '806775a274e47ffa4a7ca45083725261', 'admin', 1, 'admin@email.com', '2013-07-03 00:22:44', '2013-07-07 21:33:09'),
 	(3, 'teste', 'teste', 'a3c17bc1ea27979d0b0c268534b6b759', 'admin', 0, 'mothsin@hotmail.com', '2014-12-09 21:12:15', '2014-12-09 21:12:15');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
